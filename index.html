@@ -1044,6 +1044,8 @@
                                 const content = OS.vfs.readFile(filePath);
                                 if (name.endsWith('.svg')) {
                                     OS.apps['vector-paint']?.launch(filePath);
+                                } else if (name.endsWith('.js')) {
+                                    OS.apps['app-studio']?.launch(filePath);
                                 } else {
                                     OS.apps['text-editor']?.launch(filePath);
                                 }
@@ -1289,7 +1291,7 @@
         OS.registerApp({
             id: 'text-editor',
             name: 'Text Editor',
-            icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`,
+            icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 002-2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`,
             launch(filePath = null) {
                 let currentFile = filePath;
                 const win = OS.createWindow({
@@ -1502,31 +1504,49 @@
             }
         });
 
-        // 8. App Studio & API Playground
+        // 8. Upgraded App Studio & Live IDE 2.0
         OS.registerApp({
             id: 'app-studio',
             name: 'App Studio',
             icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>`,
-            launch() {
+            launch(filePath = null) {
+                let currentPath = filePath;
                 const win = OS.createWindow({
-                    title: 'App Studio & API Playground',
-                    width: 660,
-                    height: 480,
+                    title: `App Studio ${currentPath ? '- ' + currentPath : ''}`,
+                    width: 720,
+                    height: 520,
                     content: `
                         <div class="flex flex-col h-full bg-slate-950 text-xs">
-                            <div class="p-2 glass-header flex justify-between items-center">
-                                <span class="font-bold text-purple-300">Aether Public Window API (window.OS)</span>
-                                <button id="studio-run" class="px-4 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-xl font-bold text-white transition shadow-lg">Execute App</button>
+                            <!-- IDE Control Header -->
+                            <div class="p-2 glass-header flex items-center justify-between gap-2 flex-wrap">
+                                <div class="flex items-center space-x-2">
+                                    <select id="studio-templates" class="bg-slate-900 border border-purple-500/30 rounded-lg px-2 py-1 text-slate-200 text-xs focus:outline-none">
+                                        <option value="">Load Template...</option>
+                                        <option value="counter">Interactive Counter</option>
+                                        <option value="notepad">Quick Sticky Note</option>
+                                        <option value="nested">Meta App Launcher</option>
+                                    </select>
+                                    <button id="studio-save" class="px-3 py-1 rounded glass-button text-indigo-300 font-medium">Save to VFS</button>
+                                    <button id="studio-pin" class="px-3 py-1 rounded glass-button text-amber-300 font-medium" title="Install directly onto Desktop">📌 Pin to Desktop</button>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <button id="studio-run" class="px-4 py-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg font-bold text-white transition shadow-lg flex items-center space-x-1">
+                                        <span>▶ Run App</span>
+                                    </button>
+                                </div>
                             </div>
-                            <textarea id="studio-code" class="flex-1 bg-slate-900/90 p-4 text-emerald-400 font-mono focus:outline-none resize-none leading-relaxed" spellcheck="false">// Program custom windows directly via OS API!
+
+                            <!-- Code Editor -->
+                            <textarea id="studio-code" class="flex-1 bg-slate-950 p-4 text-emerald-400 font-mono focus:outline-none resize-none leading-relaxed border-b border-purple-500/20" spellcheck="false">// Program custom windows directly via OS API!
 const customWin = OS.createWindow({
   title: "Dynamic User App",
   width: 360,
-  height: 220,
+  height: 240,
   content: \`
     <div class="p-6 text-center space-y-4">
       <h3 class="text-lg font-bold text-purple-300">Hello AetherOS!</h3>
-      <button id="notify-btn" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-xl font-bold text-white transition">Trigger System Notification</button>
+      <p class="text-xs text-slate-300">Build interactive widgets or sub-apps effortlessly.</p>
+      <button id="notify-btn" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-xl font-bold text-white transition shadow-lg">Trigger System Notification</button>
     </div>
   \`
 });
@@ -1534,16 +1554,101 @@ const customWin = OS.createWindow({
 customWin.element.querySelector('#notify-btn').onclick = () => {
   OS.notify({ title: "App Studio", message: "Successfully executed custom script!" });
 };</textarea>
+
+                            <!-- Live Runtime Output Log -->
+                            <div class="h-24 bg-slate-900/90 p-2 font-mono text-[11px] overflow-y-auto flex flex-col justify-between" id="studio-console-wrapper">
+                                <div class="flex justify-between items-center text-slate-400 border-b border-white/10 pb-1 mb-1">
+                                    <span class="font-bold text-purple-400">Execution Console Log</span>
+                                    <button id="studio-clear-log" class="hover:text-white">Clear Log</button>
+                                </div>
+                                <div id="studio-console" class="flex-1 overflow-y-auto space-y-0.5 text-slate-300">
+                                    <div class="text-slate-500 italic">Console output & errors will appear here...</div>
+                                </div>
+                            </div>
                         </div>
                     `
                 });
 
+                const codeArea = win.element.querySelector('#studio-code');
+                const consoleDiv = win.element.querySelector('#studio-console');
+
+                // Load file if opened via VFS File Explorer
+                if (currentPath) {
+                    const content = OS.vfs.readFile(currentPath);
+                    if (content) codeArea.value = content;
+                }
+
+                const logToConsole = (msg, isError = false) => {
+                    const line = document.createElement('div');
+                    line.className = isError ? 'text-rose-400 font-bold' : 'text-emerald-300';
+                    line.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+                    consoleDiv.appendChild(line);
+                    consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                };
+
+                win.element.querySelector('#studio-clear-log').onclick = () => {
+                    consoleDiv.innerHTML = '';
+                };
+
+                // Run Code Handler
                 win.element.querySelector('#studio-run').onclick = () => {
-                    const code = win.element.querySelector('#studio-code').value;
+                    const code = codeArea.value;
                     try {
-                        new Function('OS', code)(OS);
+                        const runFunc = new Function('OS', 'console', code);
+                        runFunc(OS, {
+                            log: (...args) => logToConsole(args.join(' ')),
+                            error: (...args) => logToConsole(args.join(' '), true),
+                            warn: (...args) => logToConsole(`[WARN] ` + args.join(' '))
+                        });
+                        logToConsole('App script executed successfully.');
                     } catch(err) {
-                        OS.notify({ title: 'App Studio Error', message: err.message, type: 'error' });
+                        logToConsole(err.message, true);
+                        OS.notify({ title: 'App Studio Error', message: err.message, duration: 4000 });
+                    }
+                };
+
+                // Save to VFS
+                win.element.querySelector('#studio-save').onclick = () => {
+                    const savePath = currentPath || prompt('Enter filename to save script:', 'Desktop/MyCustomApp.js');
+                    if (savePath) {
+                        OS.vfs.writeFile(savePath, codeArea.value);
+                        currentPath = savePath;
+                        win.element.querySelector('.window-title').innerText = `App Studio - ${currentPath}`;
+                        OS.notify({ title: 'App Studio', message: `Saved ${savePath} to VFS` });
+                    }
+                };
+
+                // Pin directly to OS Desktop
+                win.element.querySelector('#studio-pin').onclick = () => {
+                    const appName = prompt('Enter a name for your Desktop App:', 'My App');
+                    if (!appName) return;
+                    const appId = 'app-' + Math.random().toString(36).substring(2, 7);
+
+                    OS.registerApp({
+                        id: appId,
+                        name: appName,
+                        icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`,
+                        launch() {
+                            try {
+                                new Function('OS', codeArea.value)(OS);
+                            } catch(e) {
+                                alert('Error running pinned app: ' + e.message);
+                            }
+                        }
+                    });
+
+                    OS.notify({ title: 'App Pinned!', message: `"${appName}" has been installed to your Desktop!` });
+                };
+
+                // Templates Switcher
+                win.element.querySelector('#studio-templates').onchange = (e) => {
+                    const t = e.target.value;
+                    if (t === 'counter') {
+                        codeArea.value = `const win = OS.createWindow({\n  title: "Interactive Counter",\n  width: 320,\n  height: 220,\n  content: \`\n    <div class="p-6 text-center space-y-4">\n      <h3 class="text-lg font-bold text-purple-300">Counter App</h3>\n      <div id="cnt" class="text-4xl font-extrabold text-white">0</div>\n      <div class="flex justify-center space-x-2">\n        <button id="dec" class="px-4 py-2 bg-rose-600/50 hover:bg-rose-600 rounded-lg text-white font-bold transition">-</button>\n        <button id="inc" class="px-4 py-2 bg-emerald-600/50 hover:bg-emerald-600 rounded-lg text-white font-bold transition">+</button>\n      </div>\n    </div>\n  \`\n});\nlet c = 0;\nwin.element.querySelector('#inc').onclick = () => win.element.querySelector('#cnt').innerText = ++c;\nwin.element.querySelector('#dec').onclick = () => win.element.querySelector('#cnt').innerText = --c;`;
+                    } else if (t === 'notepad') {
+                        codeArea.value = `OS.createWindow({\n  title: "Sticky Note",\n  width: 300,\n  height: 250,\n  content: \`<textarea class="w-full h-full bg-amber-500/10 text-amber-200 p-4 font-mono focus:outline-none resize-none" placeholder="Type quick notes here..."></textarea>\`\n});`;
+                    } else if (t === 'nested') {
+                        codeArea.value = `// Meta App Studio Launcher Test\nOS.notify({ title: "Meta App", message: "Launching nested App Studio instance!" });\nOS.apps['app-studio']?.launch();`;
                     }
                 };
             }
@@ -1652,7 +1757,7 @@ customWin.element.querySelector('#notify-btn').onclick = () => {
             };
             document.getElementById('reboot-btn').onclick = () => location.reload();
 
-            // Auto open welcome file editor on startup
+            // Auto open welcome file explorer on startup
             setTimeout(() => {
                 OS.apps['file-explorer']?.launch('Desktop');
             }, 600);
