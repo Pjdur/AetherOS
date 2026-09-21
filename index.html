@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full select-none overflow-hidden">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,56 +34,170 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
+        /* Single Unified CSS Custom Properties System */
         :root {
-            --glass-bg: rgba(15, 10, 35, 0.65);
+            /* Colors & Typography */
+            --bg-main: #0a0518;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent-color: #8b5cf6;
+            --accent-hover: #a78bfa;
+            --accent-glow: rgba(124, 58, 237, 0.4);
+
+            /* Wallpaper */
+            --wallpaper-bg: radial-gradient(circle at center, #2e1065 0%, #0a0518 100%);
+
+            /* Glassmorphism & Surfaces */
+            --glass-bg: rgba(15, 10, 35, 0.70);
+            --glass-header: rgba(25, 16, 50, 0.85);
             --glass-border: rgba(139, 92, 246, 0.25);
             --glass-blur: 16px;
-            --accent-glow: rgba(124, 58, 237, 0.4);
-            --accent-color: #8b5cf6;
+            --glass-button-bg: rgba(255, 255, 255, 0.05);
+            --glass-button-border: rgba(255, 255, 255, 0.1);
+            --glass-button-hover-bg: rgba(139, 92, 246, 0.25);
+
+            /* Panels, Windows & Inputs */
+            --panel-card: rgba(30, 27, 75, 0.45);
+            --window-body-bg: rgba(10, 5, 24, 0.75);
+            --input-bg: rgba(15, 23, 42, 0.85);
+            --input-border: rgba(139, 92, 246, 0.3);
+            --start-footer-bg: rgba(5, 3, 15, 0.85);
+
+            /* Desktop & Typography */
+            --desktop-text: #ffffff;
+            --desktop-text-shadow: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+
+            /* Window & Shadows */
+            --window-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(124, 58, 237, 0.15);
+            --window-active-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 25px var(--accent-glow);
+
+            /* Scrollbars */
+            --scrollbar-track: rgba(10, 5, 24, 0.3);
+            --scrollbar-thumb: rgba(139, 92, 246, 0.3);
+            --scrollbar-thumb-hover: rgba(139, 92, 246, 0.6);
         }
 
+        /* True Light Theme Custom Property Overrides */
+        html.light-theme {
+            --bg-main: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-color: #7c3aed;
+            --accent-hover: #6d28d9;
+            --accent-glow: rgba(124, 58, 237, 0.2);
+
+            --wallpaper-bg: radial-gradient(circle at center, #e0e7ff 0%, #f1f5f9 100%);
+
+            --glass-bg: rgba(255, 255, 255, 0.82);
+            --glass-header: rgba(243, 244, 256, 0.92);
+            --glass-border: rgba(139, 92, 246, 0.35);
+            --glass-button-bg: rgba(0, 0, 0, 0.04);
+            --glass-button-border: rgba(0, 0, 0, 0.1);
+            --glass-button-hover-bg: rgba(139, 92, 246, 0.15);
+
+            --panel-card: rgba(238, 242, 255, 0.85);
+            --window-body-bg: rgba(255, 255, 255, 0.85);
+            --input-bg: rgba(255, 255, 255, 0.95);
+            --input-border: rgba(139, 92, 246, 0.4);
+            --start-footer-bg: rgba(238, 242, 255, 0.95);
+
+            --desktop-text: #1e1b4b;
+            --desktop-text-shadow: none;
+
+            --window-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 0 20px rgba(124, 58, 237, 0.1);
+            --window-active-shadow: 0 25px 60px rgba(0, 0, 0, 0.15), 0 0 25px var(--accent-glow);
+
+            --scrollbar-track: rgba(226, 232, 240, 0.5);
+            --scrollbar-thumb: rgba(139, 92, 246, 0.4);
+            --scrollbar-thumb-hover: rgba(139, 92, 246, 0.7);
+        }
+
+        /* Core Body & Layout Elements */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a0518;
-            color: #f1f5f9;
+            background-color: var(--bg-main);
+            color: var(--text-main);
             overflow: hidden;
             height: 100vh;
             width: 100vw;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Glassmorphism styling */
+        #wallpaper {
+            background-image: var(--wallpaper-bg);
+            transition: background-image 0.5s ease;
+        }
+
+        /* Utility Components mapped to Custom CSS Variables */
         .glass-panel {
             background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             backdrop-filter: blur(var(--glass-blur));
             -webkit-backdrop-filter: blur(var(--glass-blur));
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: var(--window-shadow);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .glass-header {
-            background: rgba(25, 16, 50, 0.75);
-            backdrop-filter: blur(12px);
+            background: var(--glass-header);
             border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .glass-button {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--glass-button-bg);
+            border: 1px solid var(--glass-button-border);
+            color: var(--text-main);
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .glass-button:hover {
-            background: rgba(139, 92, 246, 0.25);
-            border-color: rgba(167, 139, 250, 0.5);
+            background: var(--glass-button-hover-bg);
+            border-color: var(--glass-border);
             box-shadow: 0 0 12px var(--accent-glow);
         }
 
+        .glass-input {
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-main);
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .glass-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .glass-footer {
+            background-color: var(--start-footer-bg);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .panel-card {
+            background: var(--panel-card);
+            border: 1px solid var(--glass-border);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .desktop-label {
+            color: var(--desktop-text);
+            filter: var(--desktop-text-shadow);
+        }
+
         .window-shadow {
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(124, 58, 237, 0.15);
+            box-shadow: var(--window-shadow);
         }
 
         .window-shadow.active-window {
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 25px var(--accent-glow);
-            border-color: rgba(167, 139, 250, 0.5);
+            box-shadow: var(--window-active-shadow);
+            border-color: var(--glass-border);
+        }
+
+        .window-body {
+            background-color: var(--window-body-bg);
+            color: var(--text-main);
         }
 
         /* Custom Scrollbars */
@@ -90,15 +205,18 @@
             width: 6px;
             height: 6px;
         }
+
         ::-webkit-scrollbar-track {
-            background: rgba(10, 5, 24, 0.3);
+            background: var(--scrollbar-track);
         }
+
         ::-webkit-scrollbar-thumb {
-            background: rgba(139, 92, 246, 0.3);
+            background: var(--scrollbar-thumb);
             border-radius: 3px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(139, 92, 246, 0.6);
+            background: var(--scrollbar-thumb-hover);
         }
 
         /* Magnet Snap Preview */
@@ -118,28 +236,39 @@
         }
 
         @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(60px, -40px) scale(1.1); }
-            100% { transform: translate(-40px, 50px) scale(0.95); }
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(60px, -40px) scale(1.1);
+            }
+
+            100% {
+                transform: translate(-40px, 50px) scale(0.95);
+            }
         }
 
-        /* Desktop Icon selection */
+        /* Desktop Icon Selection */
         .desktop-icon {
             transition: transform 0.15s ease, background-color 0.15s ease;
         }
+
         .desktop-icon:hover {
-            background-color: rgba(139, 92, 246, 0.2);
+            background-color: var(--glass-button-hover-bg);
             transform: translateY(-2px);
         }
+
         .desktop-icon:active {
             transform: scale(0.95);
         }
 
-        /* Taskbar animations */
+        /* Taskbar Animations */
         .taskbar-item {
             position: relative;
             transition: all 0.2s ease;
         }
+
         .taskbar-item.active::after {
             content: '';
             position: absolute;
@@ -147,27 +276,33 @@
             left: 20%;
             right: 20%;
             height: 3px;
-            background: #a78bfa;
+            background: var(--accent-hover);
             border-radius: 2px;
-            box-shadow: 0 0 8px #a78bfa;
+            box-shadow: 0 0 8px var(--accent-hover);
         }
     </style>
 </head>
-<body class="w-screen h-screen relative overflow-hidden bg-aether-dark">
+
+<body class="w-screen h-screen relative overflow-hidden">
 
     <div id="wallpaper-container" class="absolute inset-0 z-0 overflow-hidden">
         <svg id="svg-bg" class="w-full h-full absolute inset-0" xmlns="http://www.w3.org/2000/svg">
             <!-- Dynamic SVG Wallpaper loaded by JS -->
         </svg>
         <div class="glow-orb w-[500px] h-[500px] bg-purple-600/30 top-[-100px] left-[-100px]"></div>
-        <div class="glow-orb w-[600px] h-[600px] bg-indigo-600/30 bottom-[-150px] right-[-100px]" style="animation-delay: -5s;"></div>
-        <div class="glow-orb w-[400px] h-[400px] bg-blue-600/20 top-[40%] left-[30%]" style="animation-delay: -10s;"></div>
+        <div class="glow-orb w-[600px] h-[600px] bg-indigo-600/30 bottom-[-150px] right-[-100px]"
+            style="animation-delay: -5s;"></div>
+        <div class="glow-orb w-[400px] h-[400px] bg-blue-600/20 top-[40%] left-[30%]" style="animation-delay: -10s;">
+        </div>
     </div>
 
-    <div id="snap-preview" class="fixed z-40 hidden border-2 border-purple-400 bg-purple-500/20 rounded-xl backdrop-blur-sm transition-all duration-150"></div>
+    <div id="snap-preview"
+        class="fixed z-40 hidden border-2 border-purple-400 bg-purple-500/20 rounded-xl backdrop-blur-sm transition-all duration-150">
+    </div>
 
     <!-- Desktop Icons Container -->
-    <div id="desktop-grid" class="absolute inset-0 z-10 p-6 grid grid-flow-col auto-cols-[100px] grid-rows-[repeat(auto-fill,105px)] gap-4 pointer-events-none pb-16">
+    <div id="desktop-grid"
+        class="absolute inset-0 z-10 p-6 grid grid-flow-col auto-cols-[100px] grid-rows-[repeat(auto-fill,105px)] gap-4 pointer-events-none pb-16">
         <!-- Desktop shortcuts dynamically populated -->
     </div>
 
@@ -176,17 +311,24 @@
         <!-- Windows inserted dynamically -->
     </div>
 
-    <div id="taskbar" class="fixed bottom-0 left-0 right-0 h-12 z-50 glass-header flex items-center justify-between px-3 border-t border-purple-500/30">
+    <div id="taskbar"
+        class="fixed bottom-0 left-0 right-0 h-12 z-50 glass-header flex items-center justify-between px-3">
         <!-- Left: Start & Search -->
         <div class="flex items-center space-x-2">
-            <button id="start-btn" class="flex items-center justify-center w-10 h-10 rounded-xl glass-button text-purple-300 hover:text-white group transition" title="Start Menu">
-                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            <button id="start-btn"
+                class="flex items-center justify-center w-10 h-10 rounded-xl glass-button text-purple-300 hover:text-white group transition"
+                title="Start Menu">
+                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
             </button>
-            <div id="quick-search-trigger" class="hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-300 hover:bg-white/10 cursor-pointer w-48">
+            <div id="quick-search-trigger"
+                class="hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-lg glass-input text-xs cursor-pointer w-48">
                 <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <span>Search apps, files...</span>
             </div>
@@ -198,136 +340,192 @@
         </div>
 
         <!-- Right: System Tray -->
-        <div class="flex items-center space-x-2 text-xs text-slate-300">
-            <div class="hidden sm:flex items-center space-x-2 px-2 py-1 rounded-lg bg-white/5 border border-white/10">
+        <div class="flex items-center space-x-2 text-xs">
+            <div class="hidden sm:flex items-center space-x-2 px-2 py-1 rounded-lg glass-button">
                 <span id="tray-wifi" title="Network: Connected (100Mbps)">
-                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
+                    </svg>
                 </span>
                 <span id="tray-volume" class="cursor-pointer hover:text-white" title="Volume: 80%">
-                    <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                    <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    </svg>
                 </span>
                 <span id="tray-battery" title="Battery: 98% (Plugged in)">
-                    <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
                 </span>
             </div>
 
             <button id="notif-toggle-btn" class="relative p-2 rounded-lg glass-button text-purple-300 hover:text-white">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
-                <span id="notif-badge" class="hidden absolute top-1 right-1 w-2 h-2 rounded-full bg-indigo-400 animate-ping"></span>
+                <span id="notif-badge"
+                    class="hidden absolute top-1 right-1 w-2 h-2 rounded-full bg-indigo-400 animate-ping"></span>
             </button>
 
-            <div id="taskbar-clock" class="px-2 py-1 text-right cursor-pointer hover:bg-white/10 rounded-lg transition" title="Calendar">
-                <div id="clock-time" class="font-bold text-xs text-white">12:00 PM</div>
-                <div id="clock-date" class="text-[10px] text-slate-400">Sep 20, 2026</div>
+            <div id="taskbar-clock" class="px-2 py-1 text-right cursor-pointer hover:bg-white/10 rounded-lg transition"
+                title="Calendar">
+                <div id="clock-time" class="font-bold text-xs">12:00 PM</div>
+                <div id="clock-date" class="text-[10px] opacity-75">Sep 20, 2026</div>
             </div>
         </div>
     </div>
 
-    <div id="start-menu" class="fixed bottom-14 left-3 w-96 max-w-[95vw] glass-panel rounded-2xl z-50 hidden flex-col overflow-hidden border border-purple-500/30 transition-all duration-200 transform scale-95 opacity-0">
+    <div id="start-menu"
+        class="fixed bottom-14 left-3 w-96 max-w-[95vw] glass-panel rounded-2xl z-50 hidden flex-col overflow-hidden transition-all duration-200 transform scale-95 opacity-0">
         <!-- Start Header / Search -->
         <div class="p-4 border-b border-white/10 bg-white/5">
             <div class="relative">
-                <input type="text" id="start-search-input" placeholder="Type to search apps, settings, commands..." class="w-full bg-slate-900/80 border border-purple-500/30 rounded-xl px-10 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400">
-                <svg class="w-5 h-5 text-purple-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" id="start-search-input" placeholder="Type to search apps, settings, commands..."
+                    class="w-full glass-input rounded-xl px-10 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-purple-400">
+                <svg class="w-5 h-5 text-purple-400 absolute left-3 top-2.5" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
             </div>
         </div>
 
         <!-- Pinned Apps Grid -->
         <div class="p-4 flex-1 overflow-y-auto max-h-[380px]">
-            <div class="text-xs font-semibold text-purple-300 tracking-wider uppercase mb-3">Applications</div>
+            <div class="text-xs font-semibold text-purple-400 tracking-wider uppercase mb-3">Applications</div>
             <div id="start-apps-grid" class="grid grid-cols-4 gap-3">
                 <!-- App shortcuts populated dynamically -->
             </div>
 
-            <div class="text-xs font-semibold text-purple-300 tracking-wider uppercase mt-6 mb-2">Recent Files</div>
+            <div class="text-xs font-semibold text-purple-400 tracking-wider uppercase mt-6 mb-2">Recent Files</div>
             <div id="start-recent-files" class="space-y-1 text-xs">
                 <!-- Recent items dynamically populated -->
             </div>
         </div>
 
         <!-- Start Footer / User & Power -->
-        <div class="p-3 border-t border-white/10 bg-slate-950/60 flex items-center justify-between">
+        <div class="p-3 glass-footer flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-400 flex items-center justify-center text-white font-bold text-xs shadow-md">
+                <div
+                    class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-400 flex items-center justify-center text-white font-bold text-xs shadow-md">
                     AE
                 </div>
                 <div>
-                    <div class="text-xs font-semibold text-slate-200">Aether Developer</div>
+                    <div class="text-xs font-semibold">Aether Developer</div>
                     <div class="text-[10px] text-purple-400">Administrator</div>
                 </div>
             </div>
             <div class="flex items-center space-x-1">
-                <button id="lock-btn" class="p-2 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white" title="Lock OS">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <button id="lock-btn" class="p-2 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white"
+                    title="Lock OS">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
                 </button>
-                <button id="reboot-btn" class="p-2 rounded-lg hover:bg-red-500/20 text-slate-300 hover:text-red-300" title="Restart AetherOS">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <button id="reboot-btn" class="p-2 rounded-lg hover:bg-red-500/20 text-slate-300 hover:text-red-300"
+                    title="Restart AetherOS">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="notification-drawer" class="fixed bottom-14 right-3 w-80 max-w-[90vw] glass-panel rounded-2xl z-50 hidden flex-col overflow-hidden border border-purple-500/30 transition-all duration-200">
+    <div id="notification-drawer"
+        class="fixed bottom-14 right-3 w-80 max-w-[90vw] glass-panel rounded-2xl z-50 hidden flex-col overflow-hidden transition-all duration-200">
         <div class="p-3 border-b border-white/10 flex items-center justify-between">
-            <span class="text-xs font-semibold text-purple-300 uppercase tracking-wider">Notifications</span>
-            <button id="clear-notifs-btn" class="text-[11px] text-slate-400 hover:text-purple-300">Clear All</button>
+            <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Notifications</span>
+            <button id="clear-notifs-btn" class="text-[11px] opacity-70 hover:opacity-100">Clear All</button>
         </div>
         <div id="notif-list" class="p-3 space-y-2 max-h-80 overflow-y-auto text-xs">
-            <div class="text-center py-6 text-slate-500 italic">No new notifications</div>
+            <div class="text-center py-6 opacity-50 italic">No new notifications</div>
         </div>
     </div>
 
     <!-- Toast Floating Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2 pointer-events-none w-80 max-w-[90vw]"></div>
 
-    <div id="context-menu" class="fixed z-50 hidden glass-panel rounded-xl py-1.5 w-48 border border-purple-500/40 text-xs text-slate-200 shadow-2xl">
-        <button class="ctx-item w-full px-3 py-1.5 text-left hover:bg-purple-600/30 flex items-center space-x-2" data-action="new-file">
-            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+    <div id="context-menu"
+        class="fixed z-50 hidden glass-panel rounded-xl py-1.5 w-48 text-xs shadow-2xl">
+        <button class="ctx-item w-full px-3 py-1.5 text-left hover:bg-purple-600/30 flex items-center space-x-2"
+            data-action="new-file">
+            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
             <span>New Text File</span>
         </button>
-        <button class="ctx-item w-full px-3 py-1.5 text-left hover:bg-purple-600/30 flex items-center space-x-2" data-action="new-folder">
-            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <button class="ctx-item w-full px-3 py-1.5 text-left hover:bg-purple-600/30 flex items-center space-x-2"
+            data-action="new-folder">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
             <span>New Folder</span>
         </button>
         <div class="my-1 border-t border-white/10"></div>
-        <button class="ctx-item w-full px-3 py-1.5 text-left hover:bg-purple-600/30 flex items-center space-x-2" data-action="open-terminal">
-            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <button class="ctx-item w-full px-3 py-1.5 text-left hover:bg-purple-600/30 flex items-center space-x-2"
+            data-action="open-terminal">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
             <span>Open Terminal Here</span>
         </button>
-        <button class="ctx-item w-full px-3 py-1.5 text-left hover:bg-purple-600/30 flex items-center space-x-2" data-action="open-settings">
-            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+        <button class="ctx-item w-full px-3 py-1.5 text-left hover:bg-purple-600/30 flex items-center space-x-2"
+            data-action="open-settings">
+            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            </svg>
             <span>Change Wallpaper</span>
         </button>
         <div class="my-1 border-t border-white/10"></div>
-        <button class="ctx-item w-full px-3 py-1.5 text-left hover:bg-purple-600/30 flex items-center space-x-2" data-action="refresh">
-            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        <button class="ctx-item w-full px-3 py-1.5 text-left hover:bg-purple-600/30 flex items-center space-x-2"
+            data-action="refresh">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
             <span>Refresh Desktop</span>
         </button>
     </div>
 
-    <div id="lock-screen" class="fixed inset-0 z-[100] bg-slate-950/90 backdrop-blur-2xl flex flex-col items-center justify-center text-center transition-all duration-500">
+    <div id="lock-screen"
+        class="fixed inset-0 z-[100] glass-panel backdrop-blur-2xl flex flex-col items-center justify-center text-center transition-all duration-500">
         <div class="mb-8 space-y-2">
-            <div id="lock-clock" class="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-indigo-200 to-white">12:00</div>
+            <div id="lock-clock"
+                class="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-indigo-200 to-white">
+                12:00</div>
             <div id="lock-date" class="text-sm text-purple-300 font-medium">Sunday, September 20</div>
         </div>
 
         <div class="flex flex-col items-center space-y-4 max-w-xs w-full">
-            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 p-1 shadow-2xl shadow-purple-500/50">
-                <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-2xl font-bold text-white">
+            <div
+                class="w-20 h-20 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 p-1 shadow-2xl shadow-purple-500/50">
+                <div
+                    class="w-full h-full rounded-full glass-panel flex items-center justify-center text-2xl font-bold">
                     AE
                 </div>
             </div>
-            <div class="text-lg font-semibold text-white">Aether Developer</div>
+            <div class="text-lg font-semibold">Aether Developer</div>
 
             <form id="login-form" class="w-full space-y-3">
-                <input type="password" id="lock-pass" placeholder="Enter PIN (Default: 1234 or press Enter)" class="w-full bg-white/10 border border-purple-500/40 rounded-xl px-4 py-2 text-center text-sm text-white placeholder-slate-400 focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50">
-                <button type="submit" class="w-full py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-sm transition shadow-lg shadow-purple-600/30">
+                <input type="password" id="lock-pass" placeholder="Enter PIN (Default: 1234 or press Enter)"
+                    class="w-full glass-input rounded-xl px-4 py-2 text-center text-sm focus:outline-none focus:ring-2 focus:ring-purple-400/50">
+                <button type="submit"
+                    class="w-full py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-sm transition shadow-lg shadow-purple-600/30">
                     Unlock AetherOS
                 </button>
             </form>
-            <div class="text-[11px] text-slate-400">Press Enter or click unlock</div>
+            <div class="text-[11px] opacity-75">Press Enter or click unlock</div>
         </div>
     </div>
 
@@ -363,9 +561,9 @@
             }
 
             click() { this.playBeep(800, 0.04, 'sine', 0.04); }
-            open() { 
-                this.playBeep(440, 0.08, 'sine', 0.06); 
-                setTimeout(() => this.playBeep(880, 0.1, 'sine', 0.06), 50); 
+            open() {
+                this.playBeep(440, 0.08, 'sine', 0.06);
+                setTimeout(() => this.playBeep(880, 0.1, 'sine', 0.06), 50);
             }
             close() { this.playBeep(350, 0.08, 'triangle', 0.05); }
             notify() {
@@ -392,7 +590,7 @@
                                 type: 'dir',
                                 children: {
                                     'Welcome.txt': { type: 'file', content: 'Welcome to AetherOS!\n\nThis is an extensible web-based desktop environment featuring:\n- Complete Developer API (window.OS)\n- Vector Canvas Paint\n- Realtime System Monitor\n- Shell Terminal & Live App Studio\n\nDouble click files or apps to get started!' },
-                                    'SampleApp.js': { type: 'file', content: `// Custom App Example for AetherOS App Studio\nconst win = OS.createWindow({\n  title: "Interactive Counter",\n  width: 340,\n  height: 240,\n  content: \`\n    <div class="p-6 text-center space-y-4">\n      <h3 class="text-lg font-bold text-purple-300">Aether Counter App</h3>\n      <div id="count-display" class="text-4xl font-extrabold text-white my-2">0</div>\n      <div class="flex justify-center space-x-2">\n        <button id="dec-btn" class="px-4 py-2 bg-red-600/50 hover:bg-red-600 rounded-lg text-white font-bold transition">-</button>\n        <button id="inc-btn" class="px-4 py-2 bg-emerald-600/50 hover:bg-emerald-600 rounded-lg text-white font-bold transition">+</button>\n      </div>\n    </div>\n  \`\n});\n\nlet count = 0;\nwin.element.querySelector('#inc-btn').onclick = () => {\n  count++;\n  win.element.querySelector('#count-display').innerText = count;\n};\nwin.element.querySelector('#dec-btn').onclick = () => {\n  count--;\n  win.element.querySelector('#count-display').innerText = count;\n};` }
+                                    'SampleApp.js': { type: 'file', content: `// Custom App Example for AetherOS App Studio\nconst win = OS.createWindow({\n  title: "Interactive Counter",\n  width: 340,\n  height: 240,\n  content: \`\n    <div class="p-6 text-center space-y-4">\n      <h3 class="text-lg font-bold text-purple-400">Aether Counter App</h3>\n      <div id="count-display" class="text-4xl font-extrabold my-2">0</div>\n      <div class="flex justify-center space-x-2">\n        <button id="dec-btn" class="px-4 py-2 bg-red-600/50 hover:bg-red-600 rounded-lg text-white font-bold transition">-</button>\n        <button id="inc-btn" class="px-4 py-2 bg-emerald-600/50 hover:bg-emerald-600 rounded-lg text-white font-bold transition">+</button>\n      </div>\n    </div>\n  \`\n});\n\nlet count = 0;\nwin.element.querySelector('#inc-btn').onclick = () => {\n  count++;\n  win.element.querySelector('#count-display').innerText = count;\n};\nwin.element.querySelector('#dec-btn').onclick = () => {\n  count--;\n  win.element.querySelector('#count-display').innerText = count;\n};` }
                                 }
                             },
                             'Documents': {
@@ -415,14 +613,14 @@
             save() {
                 try {
                     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tree));
-                } catch(e) { console.error('Failed to save VFS', e); }
+                } catch (e) { console.error('Failed to save VFS', e); }
             }
 
             load() {
                 try {
                     const data = localStorage.getItem(this.STORAGE_KEY);
                     return data ? JSON.parse(data) : null;
-                } catch(e) { return null; }
+                } catch (e) { return null; }
             }
 
             getNode(path) {
@@ -511,7 +709,7 @@
                 this.resizable = options.resizable !== false;
                 this.minimizable = options.minimizable !== false;
                 this.onClose = options.onClose || null;
-                
+
                 this.isMaximized = false;
                 this.isMinimized = false;
                 this.prevRect = null;
@@ -523,15 +721,15 @@
             createDOM() {
                 const el = document.createElement('div');
                 el.id = this.id;
-                el.className = 'absolute pointer-events-auto flex flex-col rounded-2xl glass-panel window-shadow border border-purple-500/30 overflow-hidden transition-all duration-75';
+                el.className = 'absolute pointer-events-auto flex flex-col rounded-2xl glass-panel window-shadow overflow-hidden transition-all duration-75';
                 el.style.width = `${this.width}px`;
                 el.style.height = `${this.height}px`;
                 el.style.transform = `translate3d(${this.x}px, ${this.y}px, 0px)`;
-                
+
                 el.innerHTML = `
                     <!-- Window Header -->
                     <div class="window-header h-10 glass-header flex items-center justify-between px-3 cursor-grab active:cursor-grabbing select-none">
-                        <div class="flex items-center space-x-2 text-xs font-semibold text-slate-200 pointer-events-none truncate">
+                        <div class="flex items-center space-x-2 text-xs font-semibold pointer-events-none truncate">
                             <span class="window-icon">${this.icon}</span>
                             <span class="window-title truncate">${this.title}</span>
                         </div>
@@ -543,7 +741,7 @@
                     </div>
 
                     <!-- Window Content Body -->
-                    <div class="window-body flex-1 overflow-auto relative bg-slate-950/40 text-slate-100 p-0">
+                    <div class="window-body flex-1 overflow-auto relative p-0">
                         ${typeof this.content === 'string' ? this.content : ''}
                     </div>
 
@@ -811,7 +1009,7 @@
 
                 this.windows.forEach(win => {
                     const tab = document.createElement('button');
-                    tab.className = `taskbar-item flex items-center space-x-2 px-3 py-1 rounded-xl text-xs font-medium transition ${win === this.activeWindow && !win.isMinimized ? 'bg-purple-600/40 text-white border border-purple-400/40 active' : 'bg-white/5 hover:bg-white/10 text-slate-300'}`;
+                    tab.className = `taskbar-item flex items-center space-x-2 px-3 py-1 rounded-xl text-xs font-medium transition ${win === this.activeWindow && !win.isMinimized ? 'glass-button active' : 'glass-button opacity-70 hover:opacity-100'}`;
                     tab.innerHTML = `
                         <span class="w-4 h-4">${win.icon}</span>
                         <span class="truncate max-w-[100px]">${win.title}</span>
@@ -836,14 +1034,14 @@
                     <radialGradient id="grad1" cx="30%" cy="30%" r="70%">
                         <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.6"/>
                         <stop offset="50%" stop-color="#4c1d95" stop-opacity="0.3"/>
-                        <stop offset="100%" stop-color="#0a0518" stop-opacity="1"/>
+                        <stop offset="100%" stop-color="var(--bg-main)" stop-opacity="1"/>
                     </radialGradient>
                     <radialGradient id="grad2" cx="70%" cy="80%" r="60%">
                         <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.5"/>
-                        <stop offset="100%" stop-color="#0a0518" stop-opacity="0"/>
+                        <stop offset="100%" stop-color="var(--bg-main)" stop-opacity="0"/>
                     </radialGradient>
                 </defs>
-                <rect width="100%" height="100%" fill="#0a0518"/>
+                <rect width="100%" height="100%" fill="var(--bg-main)"/>
                 <rect width="100%" height="100%" fill="url(#grad1)"/>
                 <rect width="100%" height="100%" fill="url(#grad2)"/>
                 <g stroke="#ffffff" stroke-opacity="0.05" stroke-width="1">
@@ -854,20 +1052,20 @@
             'cyber-grid': () => `
                 <defs>
                     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(139, 92, 246, 0.15)" stroke-width="1"/>
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--glass-border)" stroke-width="1"/>
                     </pattern>
                     <linearGradient id="cyber-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#1e1b4b"/>
-                        <stop offset="100%" stop-color="#090514"/>
+                        <stop offset="0%" stop-color="var(--bg-main)"/>
+                        <stop offset="100%" stop-color="var(--panel-card)"/>
                     </linearGradient>
                 </defs>
                 <rect width="100%" height="100%" fill="url(#cyber-grad)"/>
                 <rect width="100%" height="100%" fill="url(#grid)"/>
-                <circle cx="50%" cy="50%" r="300" fill="none" stroke="rgba(167, 139, 250, 0.1)" stroke-width="2"/>
-                <circle cx="50%" cy="50%" r="500" fill="none" stroke="rgba(167, 139, 250, 0.05)" stroke-width="1"/>
+                <circle cx="50%" cy="50%" r="300" fill="none" stroke="var(--accent-glow)" stroke-width="2"/>
+                <circle cx="50%" cy="50%" r="500" fill="none" stroke="var(--accent-glow)" stroke-width="1"/>
             `,
             'minimal-waves': () => `
-                <rect width="100%" height="100%" fill="#0f0728"/>
+                <rect width="100%" height="100%" fill="var(--bg-main)"/>
                 <path d="M 0,300 C 300,200 600,400 1200,250 L 1200,800 L 0,800 Z" fill="rgba(124, 58, 237, 0.15)"/>
                 <path d="M 0,450 C 400,350 800,500 1400,380 L 1400,800 L 0,800 Z" fill="rgba(79, 70, 229, 0.2)"/>
             `
@@ -898,14 +1096,14 @@
                 // Toast render
                 const container = document.getElementById('toast-container');
                 const toast = document.createElement('div');
-                toast.className = 'glass-panel rounded-xl p-3 border border-purple-500/40 text-xs shadow-2xl flex items-start space-x-3 pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-200';
+                toast.className = 'glass-panel rounded-xl p-3 text-xs shadow-2xl flex items-start space-x-3 pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-200';
                 toast.innerHTML = `
                     <div class="p-1.5 bg-purple-600/30 rounded-lg text-purple-300">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div class="flex-1">
-                        <div class="font-bold text-slate-100">${notif.title}</div>
-                        <div class="text-slate-300 text-[11px] mt-0.5">${notif.message}</div>
+                        <div class="font-bold">${notif.title}</div>
+                        <div class="opacity-80 text-[11px] mt-0.5">${notif.message}</div>
                     </div>
                 `;
                 container.appendChild(toast);
@@ -925,17 +1123,17 @@
                 if (this.notifications.length > 0) {
                     badge.classList.remove('hidden');
                     list.innerHTML = this.notifications.map(n => `
-                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
-                            <div class="flex justify-between items-center font-bold text-slate-200">
+                        <div class="p-2 rounded-lg glass-button transition">
+                            <div class="flex justify-between items-center font-bold">
                                 <span>${n.title}</span>
-                                <span class="text-[9px] text-slate-400">${n.time}</span>
+                                <span class="text-[9px] opacity-60">${n.time}</span>
                             </div>
-                            <div class="text-[11px] text-slate-300 mt-1">${n.message}</div>
+                            <div class="text-[11px] opacity-80 mt-1">${n.message}</div>
                         </div>
                     `).join('');
                 } else {
                     badge.classList.add('hidden');
-                    list.innerHTML = `<div class="text-center py-6 text-slate-500 italic">No new notifications</div>`;
+                    list.innerHTML = `<div class="text-center py-6 opacity-50 italic">No new notifications</div>`;
                 }
             },
 
@@ -963,10 +1161,10 @@
                     const desktopIcon = document.createElement('div');
                     desktopIcon.className = 'desktop-icon pointer-events-auto flex flex-col items-center justify-center p-2 rounded-2xl cursor-pointer text-center group';
                     desktopIcon.innerHTML = `
-                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600/40 to-indigo-500/30 border border-purple-400/30 flex items-center justify-center text-purple-300 group-hover:scale-105 transition-transform shadow-lg">
+                        <div class="w-12 h-12 rounded-2xl glass-button flex items-center justify-center text-purple-400 group-hover:scale-105 transition-transform shadow-lg">
                             ${app.icon}
                         </div>
-                        <span class="text-[11px] font-medium text-slate-200 mt-1.5 drop-shadow truncate w-full px-1">${app.name}</span>
+                        <span class="desktop-label text-[11px] font-medium mt-1.5 truncate w-full px-1">${app.name}</span>
                     `;
                     desktopIcon.ondblclick = () => app.launch();
                     desktopIcon.onclick = () => OS.Sound.click();
@@ -974,12 +1172,12 @@
 
                     // Start Menu item
                     const startIcon = document.createElement('button');
-                    startIcon.className = 'flex flex-col items-center justify-center p-2 rounded-xl hover:bg-white/10 transition group text-center';
+                    startIcon.className = 'flex flex-col items-center justify-center p-2 rounded-xl glass-button group text-center';
                     startIcon.innerHTML = `
-                        <div class="w-10 h-10 rounded-xl bg-purple-600/30 border border-purple-400/30 flex items-center justify-center text-purple-300 group-hover:scale-110 transition-transform">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
                             ${app.icon}
                         </div>
-                        <span class="text-[10px] font-medium text-slate-200 mt-1 truncate w-full">${app.name}</span>
+                        <span class="text-[10px] font-medium mt-1 truncate w-full">${app.name}</span>
                     `;
                     startIcon.onclick = () => {
                         app.launch();
@@ -1008,7 +1206,7 @@
                                 <button id="vfs-up" class="p-1 rounded glass-button">
                                     <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
                                 </button>
-                                <input id="vfs-path-input" type="text" class="flex-1 bg-slate-900/80 border border-white/10 rounded px-2 py-1 text-slate-200" value="${currentPath}">
+                                <input id="vfs-path-input" type="text" class="flex-1 glass-input rounded px-2 py-1" value="${currentPath}">
                                 <button id="vfs-new-folder" class="px-2 py-1 rounded glass-button flex items-center space-x-1 text-purple-300">
                                     <span>+ Directory</span>
                                 </button>
@@ -1024,11 +1222,11 @@
                     const items = OS.vfs.listDir(currentPath);
                     const grid = win.element.querySelector('#vfs-file-grid');
                     grid.innerHTML = items.map(item => `
-                        <div class="vfs-item flex flex-col items-center p-2 rounded-xl hover:bg-white/10 cursor-pointer border border-transparent hover:border-purple-500/30 transition group" data-name="${item.name}" data-type="${item.type}">
-                            <div class="w-10 h-10 flex items-center justify-center text-purple-300 group-hover:scale-105 transition">
+                        <div class="vfs-item flex flex-col items-center p-2 rounded-xl glass-button cursor-pointer transition group" data-name="${item.name}" data-type="${item.type}">
+                            <div class="w-10 h-10 flex items-center justify-center text-purple-400 group-hover:scale-105 transition">
                                 ${item.type === 'dir' ? `<svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>` : `<svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`}
                             </div>
-                            <span class="mt-1 truncate w-full text-center text-slate-200 font-medium">${item.name}</span>
+                            <span class="mt-1 truncate w-full text-center font-medium">${item.name}</span>
                         </div>
                     `).join('');
 
@@ -1089,7 +1287,7 @@
                     width: 680,
                     height: 500,
                     content: `
-                        <div class="flex flex-col h-full bg-slate-900/60">
+                        <div class="flex flex-col h-full">
                             <!-- Toolbar -->
                             <div class="p-2 glass-header flex items-center justify-between text-xs gap-2 flex-wrap">
                                 <div class="flex items-center space-x-1">
@@ -1111,7 +1309,7 @@
                             </div>
                             <!-- Canvas Container -->
                             <div class="flex-1 relative overflow-hidden p-2 flex items-center justify-center">
-                                <svg id="paint-svg" class="w-full h-full bg-slate-950/80 rounded-xl border border-white/10 cursor-crosshair" xmlns="http://www.w3.org/2000/svg">
+                                <svg id="paint-svg" class="w-full h-full glass-input rounded-xl cursor-crosshair" xmlns="http://www.w3.org/2000/svg">
                                     <!-- Drawing paths -->
                                 </svg>
                             </div>
@@ -1214,14 +1412,14 @@
                     width: 600,
                     height: 380,
                     content: `
-                        <div class="flex flex-col h-full bg-slate-950 font-mono text-xs p-3 text-emerald-400">
+                        <div class="flex flex-col h-full font-mono text-xs p-3 text-emerald-400">
                             <div id="term-output" class="flex-1 overflow-y-auto space-y-1 mb-2">
                                 <div>Welcome to <span class="text-purple-400 font-bold">AetherOS Terminal v2.0</span></div>
                                 <div>Type <span class="text-amber-300">help</span> to view all built-in commands.</div>
                             </div>
                             <div class="flex items-center space-x-2 border-t border-white/10 pt-2">
                                 <span class="text-purple-400 font-bold">aether@os:~/${path}$</span>
-                                <input id="term-input" type="text" class="flex-1 bg-transparent focus:outline-none text-slate-100 font-mono">
+                                <input id="term-input" type="text" class="flex-1 bg-transparent focus:outline-none font-mono">
                             </div>
                         </div>
                     `
@@ -1230,7 +1428,7 @@
                 const out = win.element.querySelector('#term-output');
                 const inp = win.element.querySelector('#term-input');
 
-                const log = (msg, color = 'text-slate-300') => {
+                const log = (msg, color = 'opacity-80') => {
                     const div = document.createElement('div');
                     div.className = color;
                     div.innerHTML = msg;
@@ -1244,10 +1442,10 @@
                         inp.value = '';
                         if (!cmd) return;
 
-                        log(`aether@os:~/${path}$ ${cmd}`, 'text-purple-300 font-bold');
+                        log(`aether@os:~/${path}$ ${cmd}`, 'text-purple-400 font-bold');
                         const [action, ...args] = cmd.split(' ');
 
-                        switch(action.toLowerCase()) {
+                        switch (action.toLowerCase()) {
                             case 'help':
                                 log('Available commands: help, ls, cd, cat, echo, clear, neofetch, ps, js, api-help');
                                 break;
@@ -1275,7 +1473,7 @@
                                 try {
                                     const res = eval(args.join(' '));
                                     log(`Result: ${res}`, 'text-emerald-300');
-                                } catch(err) {
+                                } catch (err) {
                                     log(`Error: ${err.message}`, 'text-rose-400');
                                 }
                                 break;
@@ -1299,14 +1497,14 @@
                     width: 580,
                     height: 420,
                     content: `
-                        <div class="flex flex-col h-full bg-slate-950 text-xs">
+                        <div class="flex flex-col h-full text-xs">
                             <div class="p-2 glass-header flex items-center justify-between">
                                 <div class="flex items-center space-x-2">
                                     <button id="txt-save" class="px-3 py-1 rounded glass-button text-purple-300 font-medium">Save to VFS</button>
                                 </div>
-                                <span id="txt-stats" class="text-slate-400">Words: 0 | Chars: 0</span>
+                                <span id="txt-stats" class="opacity-60">Words: 0 | Chars: 0</span>
                             </div>
-                            <textarea id="txt-area" class="flex-1 bg-transparent p-4 text-slate-100 font-mono focus:outline-none resize-none leading-relaxed" placeholder="Type notes or code here..."></textarea>
+                            <textarea id="txt-area" class="flex-1 bg-transparent p-4 font-mono focus:outline-none resize-none leading-relaxed" placeholder="Type notes or code here..."></textarea>
                         </div>
                     `
                 });
@@ -1351,21 +1549,21 @@
                     width: 540,
                     height: 420,
                     content: `
-                        <div class="flex flex-col h-full p-4 space-y-4 text-xs bg-slate-950/80">
+                        <div class="flex flex-col h-full p-4 space-y-4 text-xs">
                             <!-- Live Usage SVG Graph -->
                             <div class="glass-panel p-3 rounded-xl border border-white/10">
-                                <div class="flex justify-between font-bold text-purple-300 mb-2">
+                                <div class="flex justify-between font-bold text-purple-400 mb-2">
                                     <span>CPU Load Stream</span>
                                     <span id="cpu-pct">0%</span>
                                 </div>
-                                <svg id="cpu-graph" class="w-full h-20 bg-slate-900/90 rounded-lg" viewBox="0 0 300 80">
+                                <svg id="cpu-graph" class="w-full h-20 glass-input rounded-lg" viewBox="0 0 300 80">
                                     <path id="cpu-path" d="M 0 80" fill="none" stroke="#a78bfa" stroke-width="2"/>
                                 </svg>
                             </div>
 
                             <!-- Process List -->
                             <div class="flex-1 glass-panel rounded-xl p-3 border border-white/10 overflow-hidden flex flex-col">
-                                <div class="font-bold text-purple-300 mb-2">Active OS Processes</div>
+                                <div class="font-bold text-purple-400 mb-2">Active OS Processes</div>
                                 <div id="sys-proc-list" class="flex-1 overflow-y-auto space-y-1"></div>
                             </div>
                         </div>
@@ -1392,8 +1590,8 @@
 
                     // Update process list
                     procList.innerHTML = OS.WindowManager.windows.map(w => `
-                        <div class="flex items-center justify-between p-1.5 rounded bg-white/5 hover:bg-white/10">
-                            <span class="truncate font-medium text-slate-200">${w.title}</span>
+                        <div class="flex items-center justify-between p-1.5 rounded glass-button">
+                            <span class="truncate font-medium">${w.title}</span>
                             <button class="px-2 py-0.5 rounded bg-rose-600/40 hover:bg-rose-600 text-rose-200 text-[10px]" onclick="OS.WindowManager.windows.find(x => x.id === '${w.id}')?.close()">End Task</button>
                         </div>
                     `).join('');
@@ -1414,22 +1612,33 @@
                     content: `
                         <div class="p-6 text-xs space-y-6">
                             <div>
-                                <h4 class="text-sm font-bold text-purple-300 mb-3">Desktop Background</h4>
+                                <h4 class="text-sm font-bold text-purple-400 mb-3">Desktop Background</h4>
                                 <div class="grid grid-cols-3 gap-3">
-                                    <button class="wp-btn p-3 rounded-xl border border-white/10 hover:border-purple-400 bg-purple-900/30 text-center" data-wp="nebula">Cosmic Nebula</button>
-                                    <button class="wp-btn p-3 rounded-xl border border-white/10 hover:border-purple-400 bg-indigo-900/30 text-center" data-wp="cyber-grid">Cyber Grid</button>
-                                    <button class="wp-btn p-3 rounded-xl border border-white/10 hover:border-purple-400 bg-blue-900/30 text-center" data-wp="minimal-waves">Minimal Waves</button>
+                                    <button class="wp-btn p-3 rounded-xl glass-button text-center" data-wp="nebula">Cosmic Nebula</button>
+                                    <button class="wp-btn p-3 rounded-xl glass-button text-center" data-wp="cyber-grid">Cyber Grid</button>
+                                    <button class="wp-btn p-3 rounded-xl glass-button text-center" data-wp="minimal-waves">Minimal Waves</button>
                                 </div>
                             </div>
+                            <div class="panel-card p-5 rounded-xl mb-6">
+                                <h3 class="text-sm font-bold text-purple-400 mb-3">Appearance</h3>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        id="light-theme-toggle" 
+                                        class="form-checkbox h-5 w-5 rounded border-purple-500/50 bg-black/20 text-purple-600 focus:ring-purple-500 focus:ring-offset-0 transition duration-200"
+                                    >
+                                    <span class="font-medium">Enable Light Theme</span>
+                                </label>
+                            </div>
                             <div class="border-t border-white/10 pt-4">
-                                <h4 class="text-sm font-bold text-purple-300 mb-3">Audio Feedback</h4>
+                                <h4 class="text-sm font-bold text-purple-400 mb-3">Audio Feedback</h4>
                                 <label class="flex items-center space-x-2 cursor-pointer">
                                     <input type="checkbox" id="set-audio" checked class="rounded bg-slate-900 border-white/20 text-purple-600 focus:ring-purple-500">
                                     <span>Enable Synthesizer Interface Sound Effects</span>
                                 </label>
                             </div>
                             <div class="border-t border-white/10 pt-4 flex justify-between items-center">
-                                <span class="text-slate-400">Reset Operating System State</span>
+                                <span class="opacity-60">Reset Operating System State</span>
                                 <button id="set-reset" class="px-3 py-1.5 rounded-xl bg-rose-600/40 hover:bg-rose-600 text-rose-100 font-semibold transition">Factory Reset</button>
                             </div>
                         </div>
@@ -1450,6 +1659,19 @@
                         location.reload();
                     }
                 };
+
+                const themeToggle = win.element.querySelector('#light-theme-toggle');
+                if (themeToggle) {
+                    themeToggle.checked = document.documentElement.classList.contains('light-theme');
+                    
+                    themeToggle.addEventListener('change', (e) => {
+                        if (e.target.checked) {
+                            document.documentElement.classList.add('light-theme');
+                        } else {
+                            document.documentElement.classList.remove('light-theme');
+                        }
+                    });
+                }
             }
         });
 
@@ -1464,8 +1686,8 @@
                     width: 300,
                     height: 400,
                     content: `
-                        <div class="flex flex-col h-full p-4 bg-slate-950/80">
-                            <input id="calc-disp" type="text" readonly class="w-full bg-slate-900/90 text-right text-2xl font-mono text-purple-300 p-3 rounded-xl border border-white/10 mb-4 focus:outline-none" value="0">
+                        <div class="flex flex-col h-full p-4">
+                            <input id="calc-disp" type="text" readonly class="w-full glass-input text-right text-2xl font-mono text-purple-400 p-3 rounded-xl mb-4 focus:outline-none" value="0">
                             <div class="grid grid-cols-4 gap-2 flex-1 text-sm font-bold">
                                 <button class="calc-b p-3 rounded-xl glass-button text-rose-300" data-v="C">C</button>
                                 <button class="calc-b p-3 rounded-xl glass-button text-purple-300" data-v="/">/</button>
@@ -1495,7 +1717,7 @@
                         const v = btn.dataset.v;
                         if (v === 'C') disp.value = '0';
                         else if (v === '=') {
-                            try { disp.value = eval(disp.value); } catch(e) { disp.value = 'Error'; }
+                            try { disp.value = eval(disp.value); } catch (e) { disp.value = 'Error'; }
                         } else {
                             disp.value = disp.value === '0' ? v : disp.value + v;
                         }
@@ -1516,11 +1738,11 @@
                     width: 720,
                     height: 520,
                     content: `
-                        <div class="flex flex-col h-full bg-slate-950 text-xs">
+                        <div class="flex flex-col h-full text-xs">
                             <!-- IDE Control Header -->
                             <div class="p-2 glass-header flex items-center justify-between gap-2 flex-wrap">
                                 <div class="flex items-center space-x-2">
-                                    <select id="studio-templates" class="bg-slate-900 border border-purple-500/30 rounded-lg px-2 py-1 text-slate-200 text-xs focus:outline-none">
+                                    <select id="studio-templates" class="glass-input rounded-lg px-2 py-1 text-xs focus:outline-none">
                                         <option value="">Load Template...</option>
                                         <option value="counter">Interactive Counter</option>
                                         <option value="notepad">Quick Sticky Note</option>
@@ -1537,15 +1759,15 @@
                             </div>
 
                             <!-- Code Editor -->
-                            <textarea id="studio-code" class="flex-1 bg-slate-950 p-4 text-emerald-400 font-mono focus:outline-none resize-none leading-relaxed border-b border-purple-500/20" spellcheck="false">// Program custom windows directly via OS API!
+                            <textarea id="studio-code" class="flex-1 bg-transparent p-4 text-emerald-400 font-mono focus:outline-none resize-none leading-relaxed border-b border-white/10" spellcheck="false">// Program custom windows directly via OS API!
 const customWin = OS.createWindow({
   title: "Dynamic User App",
   width: 360,
   height: 240,
   content: \`
     <div class="p-6 text-center space-y-4">
-      <h3 class="text-lg font-bold text-purple-300">Hello AetherOS!</h3>
-      <p class="text-xs text-slate-300">Build interactive widgets or sub-apps effortlessly.</p>
+      <h3 class="text-lg font-bold text-purple-400">Hello AetherOS!</h3>
+      <p class="text-xs opacity-75">Build interactive widgets or sub-apps effortlessly.</p>
       <button id="notify-btn" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-xl font-bold text-white transition shadow-lg">Trigger System Notification</button>
     </div>
   \`
@@ -1556,13 +1778,13 @@ customWin.element.querySelector('#notify-btn').onclick = () => {
 };</textarea>
 
                             <!-- Live Runtime Output Log -->
-                            <div class="h-24 bg-slate-900/90 p-2 font-mono text-[11px] overflow-y-auto flex flex-col justify-between" id="studio-console-wrapper">
-                                <div class="flex justify-between items-center text-slate-400 border-b border-white/10 pb-1 mb-1">
+                            <div class="h-24 glass-footer p-2 font-mono text-[11px] overflow-y-auto flex flex-col justify-between" id="studio-console-wrapper">
+                                <div class="flex justify-between items-center opacity-70 border-b border-white/10 pb-1 mb-1">
                                     <span class="font-bold text-purple-400">Execution Console Log</span>
                                     <button id="studio-clear-log" class="hover:text-white">Clear Log</button>
                                 </div>
-                                <div id="studio-console" class="flex-1 overflow-y-auto space-y-0.5 text-slate-300">
-                                    <div class="text-slate-500 italic">Console output & errors will appear here...</div>
+                                <div id="studio-console" class="flex-1 overflow-y-auto space-y-0.5">
+                                    <div class="opacity-50 italic">Console output & errors will appear here...</div>
                                 </div>
                             </div>
                         </div>
@@ -1572,7 +1794,6 @@ customWin.element.querySelector('#notify-btn').onclick = () => {
                 const codeArea = win.element.querySelector('#studio-code');
                 const consoleDiv = win.element.querySelector('#studio-console');
 
-                // Load file if opened via VFS File Explorer
                 if (currentPath) {
                     const content = OS.vfs.readFile(currentPath);
                     if (content) codeArea.value = content;
@@ -1601,7 +1822,7 @@ customWin.element.querySelector('#notify-btn').onclick = () => {
                             warn: (...args) => logToConsole(`[WARN] ` + args.join(' '))
                         });
                         logToConsole('App script executed successfully.');
-                    } catch(err) {
+                    } catch (err) {
                         logToConsole(err.message, true);
                         OS.notify({ title: 'App Studio Error', message: err.message, duration: 4000 });
                     }
@@ -1631,7 +1852,7 @@ customWin.element.querySelector('#notify-btn').onclick = () => {
                         launch() {
                             try {
                                 new Function('OS', codeArea.value)(OS);
-                            } catch(e) {
+                            } catch (e) {
                                 alert('Error running pinned app: ' + e.message);
                             }
                         }
@@ -1644,9 +1865,9 @@ customWin.element.querySelector('#notify-btn').onclick = () => {
                 win.element.querySelector('#studio-templates').onchange = (e) => {
                     const t = e.target.value;
                     if (t === 'counter') {
-                        codeArea.value = `const win = OS.createWindow({\n  title: "Interactive Counter",\n  width: 320,\n  height: 220,\n  content: \`\n    <div class="p-6 text-center space-y-4">\n      <h3 class="text-lg font-bold text-purple-300">Counter App</h3>\n      <div id="cnt" class="text-4xl font-extrabold text-white">0</div>\n      <div class="flex justify-center space-x-2">\n        <button id="dec" class="px-4 py-2 bg-rose-600/50 hover:bg-rose-600 rounded-lg text-white font-bold transition">-</button>\n        <button id="inc" class="px-4 py-2 bg-emerald-600/50 hover:bg-emerald-600 rounded-lg text-white font-bold transition">+</button>\n      </div>\n    </div>\n  \`\n});\nlet c = 0;\nwin.element.querySelector('#inc').onclick = () => win.element.querySelector('#cnt').innerText = ++c;\nwin.element.querySelector('#dec').onclick = () => win.element.querySelector('#cnt').innerText = --c;`;
+                        codeArea.value = `const win = OS.createWindow({\n  title: "Interactive Counter",\n  width: 320,\n  height: 220,\n  content: \`\n    <div class="p-6 text-center space-y-4">\n      <h3 class="text-lg font-bold text-purple-400">Counter App</h3>\n      <div id="cnt" class="text-4xl font-extrabold">0</div>\n      <div class="flex justify-center space-x-2">\n        <button id="dec" class="px-4 py-2 bg-rose-600/50 hover:bg-rose-600 rounded-lg text-white font-bold transition">-</button>\n        <button id="inc" class="px-4 py-2 bg-emerald-600/50 hover:bg-emerald-600 rounded-lg text-white font-bold transition">+</button>\n      </div>\n    </div>\n  \`\n});\nlet c = 0;\nwin.element.querySelector('#inc').onclick = () => win.element.querySelector('#cnt').innerText = ++c;\nwin.element.querySelector('#dec').onclick = () => win.element.querySelector('#cnt').innerText = --c;`;
                     } else if (t === 'notepad') {
-                        codeArea.value = `OS.createWindow({\n  title: "Sticky Note",\n  width: 300,\n  height: 250,\n  content: \`<textarea class="w-full h-full bg-amber-500/10 text-amber-200 p-4 font-mono focus:outline-none resize-none" placeholder="Type quick notes here..."></textarea>\`\n});`;
+                        codeArea.value = `OS.createWindow({\n  title: "Sticky Note",\n  width: 300,\n  height: 250,\n  content: \`<textarea class="w-full h-full glass-input p-4 font-mono focus:outline-none resize-none" placeholder="Type quick notes here..."></textarea>\`\n});`;
                     } else if (t === 'nested') {
                         codeArea.value = `// Meta App Studio Launcher Test\nOS.notify({ title: "Meta App", message: "Launching nested App Studio instance!" });\nOS.apps['app-studio']?.launch();`;
                     }
@@ -1764,4 +1985,5 @@ customWin.element.querySelector('#notify-btn').onclick = () => {
         });
     </script>
 </body>
+
 </html>
