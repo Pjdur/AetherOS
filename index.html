@@ -1918,6 +1918,9 @@ customWin.element.querySelector('#notify-btn').onclick = () => {
                     setTimeout(() => startMenu.classList.add('hidden'), 200);
                 }
             };
+            startMenu.onclick = (e) => {
+                e.stopPropagation();
+            };
 
             // Notifications Toggle Drawer
             const notifBtn = document.getElementById('notif-toggle-btn');
